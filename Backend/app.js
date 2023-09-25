@@ -10,7 +10,7 @@ app.use(express.urlencoded({extended: true}));
 
 app.use('/', route);
 app.use('/user', userRoute);
-app.use(leaveRoutes);
+app.use('/leaves', leaveRoutes);
 
 app.listen(PORT, () => {
     console.log('listening on port', PORT);

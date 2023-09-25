@@ -1,8 +1,9 @@
-import { connectionPool } from "../utils/connection";
+import { connectionPool } from "../utils/connection.js";
 
-export const addLeavesModel = (userId) => {
+export const addLeavesModel = (leavesInfo, userId) => {
     return new Promise((resolve, reject) => {
-        connectionPool.query(`select * from leaves where userID = ${userId}`, (err, result) => {
+        connectionPool.query(`insert into leaves(userID, casual_leave, sick_leave, privileged_leave, parental_leave, maternity_leave) 
+        values(${userId}, ${leavesInfo.casual_leave}, ${leavesInfo.sick_leave}, ${leavesInfo.privileged_leave}, ${leavesInfo.parental_leave}, ${leavesInfo.maternity_leave})`, (err, result) => {
             if (err) {
                 return reject(err);
             }
@@ -24,7 +25,7 @@ export const getLeavesModel = () => {
 
 export const getLeavesUserBasedModel = (email) => {
     return new Promise((resolve, reject) => {
-        connectionPool.query(`select * from leaves where email = ${email}`, (err, result) => {
+        connectionPool.query(`select * from leaves where email = '${email}'`, (err, result) => {
             if (err) {
                 return reject(err);
             }

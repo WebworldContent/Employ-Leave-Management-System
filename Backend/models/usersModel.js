@@ -32,7 +32,7 @@ export const getUsersModel = () => {
 
 export const getUserIdModel = (email) => {
     return new Promise((resolve, reject) => {
-        connectionPool.query(`select userID from users where email = ${email}`, (err, result) => {
+        connectionPool.query(`select userID from users where email = '${email}'`, (err, result) => {
             if (err) {
                 return reject(err);
             }

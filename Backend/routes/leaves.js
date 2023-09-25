@@ -1,5 +1,5 @@
 import express from 'express';
-import { addLeavesUserBased, getLeaves, getLeavesUserBased } from '../controllers/leaves';
+import { addLeavesUserBased, getLeaves, getLeavesUserBased } from '../controllers/leaves.js';
 
 const route = express.Router();
 

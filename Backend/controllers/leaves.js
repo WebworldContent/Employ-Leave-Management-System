@@ -1,11 +1,18 @@
-import { addLeavesModel, getLeavesModel, getLeavesUserBasedModel } from "../models/leavesModel";
-import { getUserIdModel } from "../models/usersModel";
+import { addLeavesModel, getLeavesModel, getLeavesUserBasedModel } from "../models/leavesModel.js";
+import { getUserIdModel } from "../models/usersModel.js";
 
 export const addLeavesUserBased = async(req, res) => {
     try {
-        const leavesInfo = {...req.body};
-        const userId = await getUserIdModel(leavesInfo.email);
-        await addLeavesModel(userId);
+        const email = req.body.email;
+        const leavesInfo = {
+            casual_leave: req.body.casualLeave,
+            sick_leave: req.body.sickLeave,
+            privileged_leave: req.body.privilegedLeave,
+            parental_leave: req.body.parentalLeave,
+            maternity_leave: req.body.maternityLeave,
+        };
+        const userIds = await getUserIdModel(email);
+        await addLeavesModel(leavesInfo, userIds[0].userID);
         res.send({success: 'Added leaves successfully'})
     } catch(err) {
         console.error(err);
@@ -29,7 +36,7 @@ export const getLeavesUserBased = async(req, res) => {
         const leaves = await getLeavesUserBasedModel(email);
         res.send(leaves);
     } catch(err) {
-        console.log(err);
+        console.error(err);
         res.status(500).send({fail: 'Internal Server Error'});
     }
 };
