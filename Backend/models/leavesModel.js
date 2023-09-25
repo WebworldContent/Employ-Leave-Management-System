@@ -25,7 +25,7 @@ export const getLeavesModel = () => {
 
 export const getLeavesUserBasedModel = (email) => {
     return new Promise((resolve, reject) => {
-        connectionPool.query(`select * from leaves where email = '${email}'`, (err, result) => {
+        connectionPool.query(`select l.* from users as u inner join leaves as l on l.userID = u.userID where email = '${email}'`, (err, result) => {
             if (err) {
                 return reject(err);
             }

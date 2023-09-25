@@ -5,6 +5,6 @@ const route = express.Router();
 
 route.post('/add-leaves', addLeavesUserBased);
 route.get('/leaves', getLeaves);
-route.get('leaves/:email', getLeavesUserBased);
+route.get('/leaves/:email', getLeavesUserBased);
 
 export {route as leaveRoutes}

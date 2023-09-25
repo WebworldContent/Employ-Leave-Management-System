@@ -32,7 +32,7 @@ export const getLeaves = async(req, res) => {
 
 export const getLeavesUserBased = async(req, res) => {
     try {
-        const email = req.params.emailId;
+        const email = req.params.email;
         const leaves = await getLeavesUserBasedModel(email);
         res.send(leaves);
     } catch(err) {
