@@ -13,7 +13,7 @@ export const addUsersModel = (userData) => {
             if (err) {
                 return reject(err);
             }
-            resolve(result)
+            return resolve(result)
         });
     })
     
@@ -25,7 +25,18 @@ export const getUsersModel = () => {
             if (err) {
                 return reject(err);
             }
-            resolve(result);
+            return resolve(result);
+        });
+    });
+};
+
+export const getUserIdModel = (email) => {
+    return new Promise((resolve, reject) => {
+        connectionPool.query(`select userID from users where email = ${email}`, (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(result);
         });
     });
 };
