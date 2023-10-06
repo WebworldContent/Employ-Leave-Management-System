@@ -38,7 +38,7 @@ export const Home = () => {
                 <Box>
                     <div style={{display:'flex', flexDirection: 'column', justifyContent: "center", flexWrap: 'wrap'}}>
                         <Chart userData={userData} port={API_PORT}/>
-                        <FeaturesSection />
+                        <FeaturesSection port={API_PORT}/>
                     </div>
                 </Box>
                 <Box>
