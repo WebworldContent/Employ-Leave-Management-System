@@ -40,3 +40,14 @@ export const getUserIdModel = (email) => {
         });
     });
 };
+
+export const getUserByEmailModel = (email) => {
+    return new Promise((resolve, reject) => {
+        connectionPool.query(`select * from users where email = '${email}'`, (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(result);
+        });
+    });
+};
