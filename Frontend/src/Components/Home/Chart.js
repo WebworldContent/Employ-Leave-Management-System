@@ -19,7 +19,6 @@ export const Chart = ({userData, port}) => {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const leavesRep = await response.json();
-            console.log(leavesRep);
             setLeaves(leavesRep[0] ? extractedLeaves({...leavesRep[0]}) : []);
         };
 

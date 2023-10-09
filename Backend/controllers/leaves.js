@@ -5,15 +5,15 @@ export const addLeavesUserBased = async(req, res) => {
     try {
         const email = req.body.email;
         const leavesInfo = {
-            casual_leave: req.body.casualLeave,
-            sick_leave: req.body.sickLeave,
-            privileged_leave: req.body.privilegedLeave,
-            parental_leave: req.body.parentalLeave,
-            maternity_leave: req.body.maternityLeave,
+            casual_leave: parseInt(req.body.casualLeave),
+            sick_leave: parseInt(req.body.sickLeave),
+            privileged_leave: parseInt(req.body.privilegedLeave),
+            parental_leave: parseInt(req.body.parentalLeave),
+            maternity_leave: parseInt(req.body.maternityLeave),
         };
         const userIds = await getUserIdModel(email);
         await addLeavesModel(leavesInfo, userIds[0].userID);
-        res.send({success: 'Added leaves successfully'})
+        res.send({success: 'Added leaves successfully'});
     } catch(err) {
         console.error(err);
         res.status(500).send({fail: 'Internal Server Error'});
