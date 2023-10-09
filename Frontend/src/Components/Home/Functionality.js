@@ -1,8 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 
 export const Functionality = () => {
     return (
@@ -22,27 +21,23 @@ const Item = styled(Paper)(({ theme }) => ({
   
 function Elevation() {
     return (
-    //   <Grid container spacing={}>
-    //       <Grid item xs={6}>
-            <Box style={{width: '100%'}}>
-                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', flexWrap: 'wrap', marginTop: '50px'}}>
-                    <Item elevation={6} style={{width: 200}}>
-                        {`elevation=${6}`}
-                    </Item>
-                    <Item elevation={6} style={{width: 200}}>
-                        {`elevation=${6}`}
-                    </Item>
-                    <Item elevation={6} style={{width: 200, marginTop: '50px'}}>
-                        {`elevation=${6}`}
-                    </Item>
-                </div>
-                <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '50px'}}>
-                    <Item elevation={6} style={{width: 500}}>
-                        {`Apply Leave`}
-                    </Item>
-                </div>
-            </Box>
-    //       </Grid>
-    //   </Grid>
+        <Box style={{width: '100%'}}>
+            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly', flexWrap: 'wrap', marginTop: '50px'}}>
+                <Item elevation={6} style={{width: 200}}>
+                    {`elevation=${6}`}
+                </Item>
+                <Item elevation={6} style={{width: 200}}>
+                    {`elevation=${6}`}
+                </Item>
+                <Item elevation={6} style={{width: 200, marginTop: '50px'}}>
+                    {`elevation=${6}`}
+                </Item>
+            </div>
+            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', marginTop: '50px'}}>
+                <Item elevation={6} style={{width: 500}}>
+                    {`Apply Leave`}
+                </Item>
+            </div>
+        </Box>
     );
   }
