@@ -1,0 +1,36 @@
+/* AdminPage.css */
+.root {
+    display: flex;
+  }
+  
+  .appBar {
+    z-index: 1400; /* theme.zIndex.drawer + 1 */
+    background-color: #1976D2; /* Change background color */
+  }
+  
+  .menuButton {
+    margin-right: 36px;
+  }
+  
+  .drawer {
+    width: 240px;
+    flex-shrink: 0;
+  }
+  
+  .drawerPaper {
+    width: 240px;
+  }
+  
+  .drawerHeader {
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    height: 64px; /* theme.mixins.toolbar height */
+    justify-content: flex-end;
+  }
+  
+  .content {
+    flex-grow: 1;
+    padding: 24px;
+  }
+  
