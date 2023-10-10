@@ -1,39 +1,33 @@
-import React from 'react';
-import { Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container } from '@mui/material';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container, Checkbox } from '@mui/material';
 import { format } from 'date-fns';
 
-const holidays = [
-    // To get the current of specific year info of holidays :- https://calendarific.com/api/v2/holidays?&api_key=cu1sQGRP6dImljSMR5TaCtdcBn5WIoUO&country=IN&year=2023
-    // Website :- https://calendarific.com/account/dashboard
-  { date: '2023-01-01', name: 'New Year\'s Day' },
-  { date: '2023-02-14', name: 'Valentine\'s Day' },
-  { date: '2023-01-01', name: 'New Year\'s Day' },
-  { date: '2023-02-14', name: 'Valentine\'s Day' },
-  { date: '2023-01-01', name: 'New Year\'s Day' },
-  { date: '2023-02-14', name: 'Valentine\'s Day' },
-  { date: '2023-01-01', name: 'New Year\'s Day' },
-  { date: '2023-02-14', name: 'Valentine\'s Day' },
-  { date: '2023-01-01', name: 'New Year\'s Day' },
-  { date: '2023-02-14', name: 'Valentine\'s Day' },
-  { date: '2023-01-01', name: 'New Year\'s Day' },
-  { date: '2023-02-14', name: 'Valentine\'s Day' },
-  { date: '2023-01-01', name: 'New Year\'s Day' },
-  { date: '2023-02-14', name: 'Valentine\'s Day' },
-  { date: '2023-01-01', name: 'New Year\'s Day' },
-  { date: '2023-02-14', name: 'Valentine\'s Day' },
-  { date: '2023-01-01', name: 'New Year\'s Day' },
-  { date: '2023-02-14', name: 'Valentine\'s Day' },
-  { date: '2023-01-01', name: 'New Year\'s Day' },
-  { date: '2023-02-14', name: 'Valentine\'s Day' },
-  { date: '2023-01-01', name: 'New Year\'s Day' },
-  { date: '2023-02-14', name: 'Valentine\'s Day' },
-  { date: '2023-01-01', name: 'New Year\'s Day' },
-  { date: '2023-02-14', name: 'Valentine\'s Day' },
-  // Add more holidays here...
-];
-
-function HolidayCalendar() {
+export default function HolidayCalendar() {
   const currentYear = new Date().getFullYear();
+  const [holidays, setHolidays] = useState([]);
+  const [selectedHoliday, setSelectedHoliday] = useState([]);
+
+  const fetchHolidays = useCallback(async () => {
+	// To get the current of specific year info of holidays :- https://calendarific.com/api/v2/holidays?&api_key=cu1sQGRP6dImljSMR5TaCtdcBn5WIoUO&country=IN&year=2023
+    // Website :- https://calendarific.com/account/dashboard
+    const response = await fetch(`https://calendarific.com/api/v2/holidays?&api_key=cu1sQGRP6dImljSMR5TaCtdcBn5WIoUO&country=IN&year=${currentYear}`);
+    const holidays = await response.json();
+    setHolidays(holidays?.response?.holidays);
+  }, [currentYear]);
+
+  useEffect(() => {
+    fetchHolidays();
+  },[fetchHolidays]);
+
+  const handleCheckboxChange = (event, holiday) => {
+	if (event.target.checked) {
+		setSelectedHoliday((preHoliday) => [...preHoliday, holiday]);
+	} else {
+		setSelectedHoliday(selectedHoliday.filter((selectHoli) => selectHoli.date.iso !== holiday.date.iso))
+	}
+  };
+
+  console.log(selectedHoliday);
 
   return (
     <Container fixed>
@@ -42,18 +36,25 @@ function HolidayCalendar() {
             Holidays List - {currentYear}
         </Typography>
         <TableContainer sx={{ maxHeight: 350 }} component={Paper} style={{backgroundColor: '#c2e9fb'}}>
-            <Table>
+            <Table stickyHeader>
             <TableHead>
                 <TableRow>
                 <TableCell>Date</TableCell>
                 <TableCell>Holiday</TableCell>
+				<TableCell>Add</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
-                {holidays.map((holiday) => (
-                <TableRow key={holiday.date}>
-                    <TableCell>{format(new Date(holiday.date), 'MMMM dd')}</TableCell>
+                {holidays?.map((holiday, indx) => (
+                <TableRow key={indx}>
+                    <TableCell>{format(new Date(holiday.date.iso), 'MMMM dd')}</TableCell>
                     <TableCell>{holiday.name}</TableCell>
+					<TableCell>
+                    <Checkbox
+                      checked={selectedHoliday.some((selectedHoliday) => selectedHoliday.date === holiday.date)}
+                      onChange={(event) => handleCheckboxChange(event, holiday)}
+                    />
+                  </TableCell>
                 </TableRow>
                 ))}
             </TableBody>
@@ -63,5 +64,3 @@ function HolidayCalendar() {
      </Container>
   );
 }
-
-export default HolidayCalendar;
