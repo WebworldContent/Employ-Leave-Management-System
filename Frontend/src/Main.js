@@ -1,7 +1,7 @@
 import React from 'react';
 import {Route, Routes} from 'react-router-dom';
 import { Home } from './Components/Home/Home';
-import LeavesForm from './Components/LoginForm/LeavesForm';
+import LeavesForm from './Components/Forms/LeavesForm';
 
 export default function Main() {
     return (
