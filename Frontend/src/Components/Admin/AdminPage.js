@@ -55,7 +55,7 @@ function AdminPage() {
       </Drawer>
       <main style={{ flexGrow: 1, padding: '24px' }}>
         <Toolbar />
-        <HolidayCalendar />
+        <HolidayCalendar port={API_PORT}/>
         <ListUsers port={API_PORT} />
       </main>
     </div>

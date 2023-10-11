@@ -33,3 +33,26 @@ export const getLeavesUserBasedModel = (email) => {
         });
     })
 };
+
+export const addHolidaysModal = (holidays) => {
+    const collection = holidays.map((holiday) => `("${holiday.name}", "${holiday.date.iso}")`);
+    const values = collection.join(',');
+    return new Promise((resolve, reject) => {
+        connectionPool.query(`insert into holiday (name, date) values ${values}`, (err, result) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(result);
+        });
+
+    }) 
+};
+
+export const getHolidaysModel = () => {
+    return new Promise((resolve, reject) => {
+        connectionPool.query(`select * from holiday`, (err, result) => {
+            if (err) {return reject(err)}
+            else {return resolve(result)}
+        })
+    })
+}

@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container, Checkbox } from '@mui/material';
+import { Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Container, Checkbox, Button } from '@mui/material';
 import { format } from 'date-fns';
 
-export default function HolidayCalendar() {
+export default function HolidayCalendar({port}) {
   const currentYear = new Date().getFullYear();
   const [holidays, setHolidays] = useState([]);
   const [selectedHoliday, setSelectedHoliday] = useState([]);
@@ -27,13 +27,29 @@ export default function HolidayCalendar() {
 	}
   };
 
+  const addHolidays = async() => {
+    try {
+      const addedData = await fetch(`http://localhost:${port}/leaves/holidays`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(selectedHoliday)
+      });
+      console.log(addedData);
+    } catch(err) {
+      console.log(err);
+    }
+  };
+
   console.log(selectedHoliday);
 
   return (
     <Container fixed>
         <Paper elevation={3} style={{ padding: '16px' }}>
         <Typography variant="h5" gutterBottom>
-            Holidays List - {currentYear}
+            <span>Holidays List - {currentYear}</span><span style={{marginLeft: '50px', position: 'fixed'}}><Button variant="contained" onClick={addHolidays}>Add Selected Holidays</Button></span>
         </Typography>
         <TableContainer sx={{ maxHeight: 350 }} component={Paper} style={{backgroundColor: '#c2e9fb'}}>
             <Table stickyHeader>

@@ -1,4 +1,4 @@
-import { addLeavesModel, getLeavesModel, getLeavesUserBasedModel } from "../models/leavesModel.js";
+import { addHolidaysModal, addLeavesModel, getHolidaysModel, getLeavesModel, getLeavesUserBasedModel } from "../models/leavesModel.js";
 import { getUserIdModel } from "../models/usersModel.js";
 
 export const addLeavesUserBased = async(req, res) => {
@@ -38,5 +38,26 @@ export const getLeavesUserBased = async(req, res) => {
     } catch(err) {
         console.error(err);
         res.status(500).send({fail: 'Internal Server Error'});
+    }
+};
+
+export const addHolidays = async(req, res) => {
+    try {
+        const holidays = req.body;
+        await addHolidaysModal(holidays);
+        res.send({success: 'Added holidays successfully'});
+    } catch(err) {
+        console.log(err);
+        res.status(500).send({fail: 'Internal Server Error'});
+    }
+};
+
+export const getHolidays = async(req, res) => {
+    try {
+        const respose = await getHolidaysModel();
+        res.send(respose);
+    } catch(err) {
+        console.log(err);
+        res.send(500).send({fail: 'Internal Server Error'});
     }
 };

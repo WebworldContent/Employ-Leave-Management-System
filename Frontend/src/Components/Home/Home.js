@@ -42,7 +42,7 @@ export const Home = () => {
                     </div>
                 </Box>
                 <Box>
-                    <HolidayCalendar />
+                    <HolidayCalendar port={API_PORT}/>
                 </Box>
             </div>
         </>
