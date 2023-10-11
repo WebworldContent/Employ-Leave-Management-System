@@ -11,11 +11,14 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import HolidayCalendar from '../Admin/HolidayCalender';
 import { ListUsers } from './ListUsers';
+import { useNavigate } from 'react-router-dom';
 
 const API_PORT = 3001;
 const drawerWidth = 240;
 
 function AdminPage() {
+  const navigate = useNavigate();
+
   return (
     <div style={{ display: 'flex' }}>
       <CssBaseline />
@@ -48,8 +51,9 @@ function AdminPage() {
       >
         <Toolbar />
         <List>
-          <ListItem>
-            <ListItemText primary="Users" />
+          <ListItem style={{display: 'flex', flexDirection: 'column', justifyContent: 'center'}}>
+            <ListItemText primary="Add Users Leaves" style={{cursor: 'pointer'}} onClick={() => navigate('/addUserLeaves')}/>
+            <ListItemText primary="Add Users" style={{cursor: 'pointer'}} onClick={() => navigate('/addUser')}/>
           </ListItem>
         </List>
       </Drawer>

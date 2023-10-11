@@ -5,6 +5,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
+import { Divider } from "@mui/material";
 
 export const ListUsers = ({port}) => {
     const [users, setusers] = useState([]);
@@ -23,7 +24,7 @@ export const ListUsers = ({port}) => {
         <Typography variant="h5">List of Users</Typography>
         <List style={{ backgroundColor: '#fff', borderRadius: '20px', marginTop: '30px' }}>
           {users.map((data) => 
-          <ListItem key={data.userID}>
+          <><ListItem key={data.userID}>
                 <ListItemText primary={data.username}/>
                 <ListItemText><Avatar alt="user" src={data.image} sx={{ width: 36, height: 36 }} /></ListItemText>
                 <ListItemText primary={data.email} />
@@ -33,7 +34,8 @@ export const ListUsers = ({port}) => {
                 <Button variant="contained" color="secondary" onClick={() => { /* Handle delete */ }}>
                 Delete
                 </Button>
-          </ListItem>) }
+          </ListItem>
+          <Divider /></>) }
         </List>
         </>
     );

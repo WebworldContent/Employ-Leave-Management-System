@@ -17,7 +17,7 @@ const defaultData = {
   parentalLeave: 0,
 };
 
-function LeavesForm() {
+export default function LeavesForm() {
   const API_PORT = 3001;
   const [formData, setFormData] = useState(defaultData);
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ function LeavesForm() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(data)
-      })
+      });
     };
 
     try {
@@ -138,6 +138,4 @@ function LeavesForm() {
       </form>
     </Container>
   );
-}
-
-export default LeavesForm;
+};
