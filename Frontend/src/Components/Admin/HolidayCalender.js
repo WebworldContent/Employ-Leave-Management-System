@@ -19,7 +19,6 @@ export default function HolidayCalendar({port}) {
   const fetchedSelectedHolidays = useCallback(async () => {
     const holidayResp = await fetch(`http://localhost:${port}/leaves/get-holidays`);
     const fetchedHolidays = await holidayResp.json();
-    console.log(fetchedHolidays);
     if (fetchedHolidays) {
       setSelectedHoliday(fetchedHolidays ? fetchedHolidays.map((data) => ({id: data.id, name: data.name, date: format(new Date(data.date), 'yyyy-MM-dd')})) : []);
     }
