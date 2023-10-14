@@ -12,18 +12,23 @@ export default function HolidayCalendar({port}) {
     // Website :- https://calendarific.com/account/dashboard
     const response = await fetch(`https://calendarific.com/api/v2/holidays?&api_key=cu1sQGRP6dImljSMR5TaCtdcBn5WIoUO&country=IN&year=${currentYear}`);
     const holidays = await response.json();
-    const holidayResp = await fetch(`http://localhost:${port}/leaves/get-holidays`);
-    const selectedHolidays = await holidayResp.json();
-    console.log(selectedHolidays);
-    if (selectedHolidays) {
-      setSelectedHoliday(holidays?.response?.holidays?.filter((holiday) => holiday.date.iso === selectedHolidays.date));
-    }
+    
     setHolidays(holidays?.response?.holidays);
-  }, [currentYear, port, setSelectedHoliday]);
+  }, [currentYear]);
+
+  const fetchedSelectedHolidays = useCallback(async () => {
+    const holidayResp = await fetch(`http://localhost:${port}/leaves/get-holidays`);
+    const fetchedHolidays = await holidayResp.json();
+    console.log(fetchedHolidays);
+    if (fetchedHolidays) {
+      setSelectedHoliday(fetchedHolidays ? fetchedHolidays.map((data) => ({id: data.id, name: data.name, date: format(new Date(data.date), 'yyyy-MM-dd')})) : []);
+    }
+  }, [port]);
 
   useEffect(() => {
     fetchHolidays();
-  },[fetchHolidays]);
+    fetchedSelectedHolidays();
+  },[fetchHolidays, fetchedSelectedHolidays]);
 
   const handleCheckboxChange = (event, holiday) => {
 	if (event.target.checked) {
@@ -49,8 +54,6 @@ export default function HolidayCalendar({port}) {
     }
   };
 
-  console.log(selectedHoliday);
-
   return (
     <Container fixed>
         <Paper elevation={3} style={{ padding: '16px' }}>
@@ -73,7 +76,7 @@ export default function HolidayCalendar({port}) {
                     <TableCell>{holiday.name}</TableCell>
 					<TableCell>
                     <Checkbox
-                      checked={selectedHoliday.some((selectedHoliday) => selectedHoliday.date === holiday.date)}
+                      checked={selectedHoliday.some((selectedHoliday) => selectedHoliday.date === holiday.date.iso)}
                       onChange={(event) => handleCheckboxChange(event, holiday)}
                     />
                   </TableCell>
