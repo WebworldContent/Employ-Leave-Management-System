@@ -10,7 +10,7 @@ export default function Main() {
     <Routes>
         <Route path='/' element={<Home/>}></Route>
         <Route path='/addUserLeaves' element={<LeavesForm/>}></Route>
-        <Route path='/addUser' element={<UsersForm/>}></Route>
+        <Route path='/addUser/:email?' element={<UsersForm/>}></Route>
         <Route path='/admin' element={<AdminPage/>}></Route>
     </Routes>
     );

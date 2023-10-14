@@ -54,8 +54,6 @@ export default function HolidayCalendar({port}) {
     }
   };
 
-  console.log(selectedHoliday);
-
   return (
     <Container fixed>
         <Paper elevation={3} style={{ padding: '16px' }}>

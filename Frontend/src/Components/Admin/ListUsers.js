@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -6,18 +6,36 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import { Divider } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export const ListUsers = ({port}) => {
     const [users, setusers] = useState([]);
+    const navigate = useNavigate();
+
+    const getUsers = useCallback(async () => {
+        const response = await fetch(`http://localhost:${port}/user/getUsers`);
+        const usersInfo = await response.json();
+        setusers(usersInfo);
+    }, [port]);
+
+    const deleteUser = async (email) => {
+        const response = await fetch(`http://localhost:${port}/user/delete-user`, {
+            method: 'DELETE',
+            headers: {
+                accept: 'application/json',
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify({email})
+        });
+        const deletedResponse = await response.json();
+        console.log(deletedResponse);
+    };
 
     useEffect(() => {
-        const getUsers = async () => {
-            const response = await fetch(`http://localhost:${port}/user/getUsers`);
-            const usersInfo = await response.json();
-            setusers(usersInfo);
-        };
         getUsers();
-    });
+    }, [getUsers]);
+
+    console.log(users);
 
     return (
         <>
@@ -28,10 +46,10 @@ export const ListUsers = ({port}) => {
                 <ListItemText primary={data.username}/>
                 <ListItemText><Avatar alt="user" src={data.image} sx={{ width: 36, height: 36 }} /></ListItemText>
                 <ListItemText primary={data.email} />
-                <Button variant="contained" color="primary" onClick={() => { /* Handle edit */ }} style={{marginRight: '10px'}}>
+                <Button variant="contained" color="primary" onClick={() => navigate(`/addUser/${data.email}`)} style={{marginRight: '10px'}}>
                 Edit
                 </Button>
-                <Button variant="contained" color="secondary" onClick={() => { /* Handle delete */ }}>
+                <Button variant="contained" color="secondary" onClick={() => deleteUser(data.email)}>
                 Delete
                 </Button>
           </ListItem>
