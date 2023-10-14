@@ -12,8 +12,14 @@ export default function HolidayCalendar({port}) {
     // Website :- https://calendarific.com/account/dashboard
     const response = await fetch(`https://calendarific.com/api/v2/holidays?&api_key=cu1sQGRP6dImljSMR5TaCtdcBn5WIoUO&country=IN&year=${currentYear}`);
     const holidays = await response.json();
+    const holidayResp = await fetch(`http://localhost:${port}/leaves/get-holidays`);
+    const selectedHolidays = await holidayResp.json();
+    console.log(selectedHolidays);
+    if (selectedHolidays) {
+      setSelectedHoliday(holidays?.response?.holidays?.filter((holiday) => holiday.date.iso === selectedHolidays.date));
+    }
     setHolidays(holidays?.response?.holidays);
-  }, [currentYear]);
+  }, [currentYear, port, setSelectedHoliday]);
 
   useEffect(() => {
     fetchHolidays();
