@@ -35,17 +35,23 @@ export const getLeavesUserBasedModel = (email) => {
 };
 
 export const addHolidaysModal = (holidays) => {
-    const collection = holidays.map((holiday) => `("${holiday.name}", "${holiday.date.iso}")`);
-    const values = collection.join(',');
-    return new Promise((resolve, reject) => {
-        connectionPool.query(`truncate table holiday; insert into holiday (name, date) values ${values}`, (err, result) => {
-            if (err) {
-                return reject(err);
-            }
-            return resolve(result);
-        });
+    const values = holidays.map((holiday) => `("${holiday.name}", "${holiday.date}")`).join(',');
 
-    });
+    return new Promise((resolve, reject) => {
+        connectionPool.query(`truncate table holiday`, (err, result) => {
+            if (err) return reject(err);
+            else return resolve(result);
+        });
+    }).then(res => {
+        return new Promise((resolve, reject) => {
+            connectionPool.query(`insert into holiday (name, date) values ${values}`, (err, result) => {
+                if (err) {
+                    return reject(err);
+                }
+                return resolve(result);
+            });
+        });
+    }).catch((err) => console.log(err))
 };
 
 export const getHolidaysModel = () => {
