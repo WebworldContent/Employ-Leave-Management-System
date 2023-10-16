@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import './Home.css';
 import { Chart } from "./Chart";
 import { FeaturesSection } from "./FeaturesSection";
@@ -17,19 +17,18 @@ export const Home = () => {
         setUserAvatar(nameInitial);
     };
 
-    useEffect(() => {
-        const getUserData = async () => {
-          const response = await fetch(`http://localhost:${API_PORT}/user/getUser/test@gmail.com`);
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          const user = await response.json();
-          setUserDate(user[0]);
-          setProfile(user[0]);
-        };
-
-        getUserData();
+    const getUserData = useCallback(async () => {
+        const response = await fetch(`http://localhost:${API_PORT}/user/getUser/test909@gmail.com`);
+        const user = await response.json();
+        setUserDate(user[0]);
+        setProfile(user[0]);
     }, [API_PORT]);
+
+    useEffect(() => {
+        getUserData();
+    }, [getUserData]);
+
+    console.log(userData);
 
     return (
         <>

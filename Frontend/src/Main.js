@@ -1,17 +1,25 @@
-import React from 'react';
-import {Route, Routes} from 'react-router-dom';
+import React, {lazy, Suspense} from 'react';
+import {Route, Routes, BrowserRouter as Router} from 'react-router-dom';
 import { Home } from './Components/Home/Home';
-import LeavesForm from './Components/Forms/LeavesForm';
-import AdminPage from './Components/Admin/AdminPage';
-import UsersForm from './Components/Forms/UsersForm';
+// import LeavesForm from './Components/Forms/LeavesForm';
+// import AdminPage from './Components/Admin/AdminPage';
+// import UsersForm from './Components/Forms/UsersForm';
+
+const LeavesForm = lazy(() => import('./Components/Forms/LeavesForm'));
+const AdminPage = lazy(() => import('./Components/Admin/AdminPage'));
+const UsersForm = lazy(() => import('./Components/Forms/UsersForm'));
 
 export default function Main() {
     return (
-    <Routes>
-        <Route path='/' element={<Home/>}></Route>
-        <Route path='/addUserLeaves' element={<LeavesForm/>}></Route>
-        <Route path='/addUser/:email?' element={<UsersForm/>}></Route>
-        <Route path='/admin' element={<AdminPage/>}></Route>
-    </Routes>
+    <Router>
+        <Suspense fallback={<p>Loading page...</p>}>
+            <Routes>
+                <Route path='/' element={<Home/>}></Route>
+                <Route path='/addUserLeaves' element={<LeavesForm/>}></Route>
+                <Route path='/addUser/:email?' element={<UsersForm/>}></Route>
+                <Route path='/admin' element={<AdminPage/>}></Route>
+            </Routes>
+        </Suspense>
+    </Router>
     );
 }

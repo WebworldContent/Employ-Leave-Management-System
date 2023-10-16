@@ -13,7 +13,7 @@ export const addUsersModel = (userData) => {
             if (err) {
                 return reject(err);
             }
-            return resolve(result)
+            resolve(result)
         });
     })
     
@@ -25,7 +25,7 @@ export const getUsersModel = () => {
             if (err) {
                 return reject(err);
             }
-            return resolve(result);
+            resolve(result);
         });
     });
 };
@@ -36,7 +36,7 @@ export const getUserIdModel = (email) => {
             if (err) {
                 return reject(err);
             }
-            return resolve(result);
+            resolve(result);
         });
     });
 };
@@ -47,7 +47,7 @@ export const getUserByEmailModel = (email) => {
             if (err) {
                 return reject(err);
             }
-            return resolve(result);
+            resolve(result);
         });
     });
 };
@@ -56,7 +56,7 @@ export const updateUserModel = (userData, email) => {
     return new Promise((resolve, reject) => {
         connectionPool.query(`update users set username = '${userData.username}', email = '${userData.email}', user_type = '${userData.user_type}' where email = '${email}'`, (err, result) => {
             if (err) return reject (err);
-            else return resolve(result);
+            else resolve(result);
         });
     });
 };
@@ -65,7 +65,7 @@ export const deleteUserModel = (email) => {
     return new Promise((resolve, reject) => {
         connectionPool.query(`delete from users where email = '${email}'`, (err, result) => {
             if (err) return reject (err);
-            else return resolve(result);
+            else resolve(result);
         });
     });
 };
