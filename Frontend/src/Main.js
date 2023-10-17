@@ -3,9 +3,6 @@ import {Route, Routes, BrowserRouter as Router} from 'react-router-dom';
 import { Home } from './Components/Home/Home';
 import RegisterForm from './Components/Forms/RegisterForm';
 import LoginForm from './Components/Forms/LoginForm';
-// import LeavesForm from './Components/Forms/LeavesForm';
-// import AdminPage from './Components/Admin/AdminPage';
-// import UsersForm from './Components/Forms/UsersForm';
 
 const LeavesForm = lazy(() => import('./Components/Forms/LeavesForm'));
 const AdminPage = lazy(() => import('./Components/Admin/AdminPage'));

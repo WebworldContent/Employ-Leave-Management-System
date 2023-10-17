@@ -30,8 +30,8 @@ const RegisterForm = () => {
     });
   };
 
-  const addUser = async(data) => {
-    await fetch(`http://localhost:${API_PORT}/user/addUser`, {
+  const register = async(data) => {
+    return await fetch(`http://localhost:${API_PORT}/user/register`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -41,16 +41,17 @@ const RegisterForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     try {
-        addUser(formData);
-        navigate('/login');
+        const reponse = await register(formData);
+        const responseBody = await reponse.json();
+        if (responseBody.success) {
+          navigate('/login');
+        }
     } catch(err) {
         console.log(err);
     }
-    // Handle form submission, e.g., sending data to a server
-    console.log(formData);
   };
 
   return (

@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Container, Typography, TextField, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
+  const API_PORT = 3001;
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+  const navigate = useNavigate();
 
   const formContainerStyle = {
     maxWidth: '300px',
@@ -26,10 +29,29 @@ const LoginForm = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const login = async(data) => {
+    return await fetch(`http://localhost:${API_PORT}/user/login`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    });
+  };
+
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    // Handle login submission, e.g., sending data to a server
-    console.log(formData);
+    try {
+      const reponse = await login(formData);
+      const responseBody = await reponse.json();
+      console.log(responseBody);
+      if (responseBody.success) {
+        navigate('/');
+      }
+    } catch(err) {
+        console.log(err);
+    }
   };
 
   return (

@@ -58,6 +58,6 @@ export const getHolidays = async(req, res) => {
         res.send(respose);
     } catch(err) {
         console.log(err);
-        res.send(500).send({fail: 'Internal Server Error'});
+        res.status(500).send({fail: 'Internal Server Error'});
     }
 };

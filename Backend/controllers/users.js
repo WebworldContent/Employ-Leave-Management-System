@@ -1,5 +1,7 @@
 import {addUsersModel, getUsersModel, getUserByEmailModel, updateUserModel, deleteUserModel} from "../models/usersModel.js";
 import bycript from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
 const saltRound = 10;
 
 const encrypt = async (password) => {
@@ -60,9 +62,60 @@ export const deleteUsers = async(req, res) => {
         const email = req.body.email;
         console.log(email);
         await deleteUserModel(email);
-        res.send({success: 'Deleted successfully'});
+        res.send({success: true, msg: 'Deleted successfully'});
     } catch (err) {
         console.error(err);
         res.status(500).send({fail: 'Internal Server Error'});
     }
+};
+
+export const registerUser = async (req, res) => {
+    try {
+        const {email} = req.body;
+        const existUser = await getUserByEmailModel(email);
+        console.log(existUser);
+        if (existUser.length) {
+            return res.status(401).json({alreadyExist: true, success: false, msg: 'User Already Exist in DB'});
+        }
+
+        const updatedPassword = await encrypt(req.body.password);
+        const userData = {
+            ...req.body,
+            password: updatedPassword,
+        };
+        await addUsersModel(userData);
+
+        const token = jwt.sign({email}, 'SecreteHash', {expiresIn: '2h'});
+        console.log(token);
+
+        res.status(200).json({success: true, msg: 'Added successfully', token});
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({fail: 'Internal Server Error'});
+    }
+};
+
+
+export const loginUser = async (req, res) => {
+    try {
+        const {email, password} = req.body;
+        if (!(email && password)) {
+            return res.status(401).send({success: false, msg: 'Incomplete Fields'});
+        }
+
+        const userData = await getUserByEmailModel(email);
+
+        if (userData.length && await bycript.compare(password, userData[0].password)) {
+            const token = jwt.sign({email}, 'SecreteHash', {expiresIn: '2h'});
+            console.log(token);
+            return res.status(200).send({success: true, msg: 'Login successfully', token})
+        } else {
+            return res.status(400).send({success: false, msg: 'Invalid Credentials Given'});
+        }
+
+    } catch(err) {
+        console.log(err);
+        return res.status(500).send({ success: false, msg: 'Internal Server Error' });
+    }
+    
 };
