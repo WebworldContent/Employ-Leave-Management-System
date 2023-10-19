@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -13,15 +13,15 @@ const checkOnline = (isOnline) => isOnline ? 'https://www.pngkey.com/png/detail/
 
 export const Users = ({port}) => {
     const [users, setusers] = useState([]);
+    const getUsers = useCallback(async () => {
+        const response = await fetch(`http://localhost:${port}/user/getUsers`);
+        const usersInfo = await response.json();
+        setusers(usersInfo);
+    }, [port]);
 
     useEffect(() => {
-        const getUsers = async () => {
-            const response = await fetch(`http://localhost:${port}/user/getUsers`);
-            const usersInfo = await response.json();
-            setusers(usersInfo);
-        };
         getUsers();
-    });
+    }, [getUsers]);
 
     return (
         <Box sx={{ width: '100%'}} >

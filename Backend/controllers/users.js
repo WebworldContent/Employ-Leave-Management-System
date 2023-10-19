@@ -25,6 +25,7 @@ export const addUser = async (req, res) => {
 
 export const getUsers = async (req, res) => {
     try {
+        console.log(req.loggedInUser);
         const users = await getUsersModel();
         res.send(users);
     } catch(err) {
@@ -86,8 +87,6 @@ export const registerUser = async (req, res) => {
         await addUsersModel(userData);
 
         const token = jwt.sign({email}, 'SecreteHash', {expiresIn: '2h'});
-        console.log(token);
-
         res.status(200).json({success: true, msg: 'Added successfully', token});
     } catch (err) {
         console.error(err);
@@ -106,9 +105,11 @@ export const loginUser = async (req, res) => {
         const userData = await getUserByEmailModel(email);
 
         if (userData.length && await bycript.compare(password, userData[0].password)) {
-            const token = jwt.sign({email}, 'SecreteHash', {expiresIn: '2h'});
-            console.log(token);
-            return res.status(200).send({success: true, msg: 'Login successfully', token})
+            const token = jwt.sign(
+                {email},
+                'SecreteHash', // process.env.SECRET
+                {expiresIn: '2h'});
+            return res.status(200).json({success: true, msg: 'Logged In', token});
         } else {
             return res.status(400).send({success: false, msg: 'Invalid Credentials Given'});
         }
