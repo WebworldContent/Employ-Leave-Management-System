@@ -14,7 +14,10 @@ export const Chart = ({userData, port}) => {
 
     useEffect(() => {
         const getUserLeaves = async () => {
-            const response = await fetch(`http://localhost:${port}/leaves/leaves/${userData.email}`);
+            const response = await fetch(`http://localhost:${port}/leaves/leaves/${userData.email}`, {
+                method: 'GET',
+                credentials: 'include',
+            });
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }

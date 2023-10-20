@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Typography, TextField, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import Cookie from 'js-cookie';
 
 const LoginForm = () => {
   const API_PORT = 3001;
@@ -45,7 +46,7 @@ const LoginForm = () => {
     try {
       const reponse = await login(formData);
       const responseBody = await reponse.json();
-      console.log(responseBody);
+      Cookie.set('token', responseBody.token);
       if (responseBody.success) {
         navigate('/');
       }

@@ -35,7 +35,10 @@ export default function LeavesForm() {
     console.log(formData);
 
     const isUserHaveLeaves = async(email) => {
-      const response = await fetch(`http://localhost:${API_PORT}/leaves/leaves/${email}`);
+      const response = await fetch(`http://localhost:${API_PORT}/leaves/leaves/${email}`, {
+        method: 'GET',
+        credentials: 'include',
+    });
       return await response.json();
     };
 
@@ -44,6 +47,7 @@ export default function LeavesForm() {
     const addLeaves = async(data) => {
       await fetch(`http://localhost:${API_PORT}/leaves/add-leaves`, {
         method: 'POST',
+        credentials: 'include',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',

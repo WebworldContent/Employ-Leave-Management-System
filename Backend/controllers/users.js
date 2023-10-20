@@ -10,63 +10,76 @@ const encrypt = async (password) => {
 
 export const addUser = async (req, res) => {
     try {
+        if (!req.loggedUserEmail) {
+            return res.sendStatus(401);
+        }
         const updatedPassword = await encrypt(req.body.password);
         const userData = {
             ...req.body,
             password: updatedPassword,
         };
         await addUsersModel(userData);
-        res.send({success: 'Added successfully'});
+        return res.send({success: 'Added successfully'});
     } catch (err) {
         console.error(err);
-        res.status(500).send({fail: 'Internal Server Error'});
+        res.status(500).send({success: false, msg: 'Internal Server Error'});
     }
 };
 
 export const getUsers = async (req, res) => {
     try {
-        console.log(req.loggedInUser);
+        if (!req.loggedUserEmail) {
+            return res.sendStatus(401);
+        }
         const users = await getUsersModel();
-        res.send(users);
+        return res.send(users);
     } catch(err) {
         console.error(err);
-        res.status(500).send({fail: 'Internal Server Error'});
+        res.status(500).send({success: false, msg: 'Internal Server Error'});
     }
 };
 
 export const getUsersByEmail = async (req, res) => {
     try {
-        const email = req.params.email;
-        console.log(email);
+        if (!req.loggedUserEmail) {
+            return res.sendStatus(401);
+        }
+        const email = req.params.email ?? req.loggedUserEmail;
         const user = await getUserByEmailModel(email);
-        res.send(user);
+        user[0].password = undefined;
+        return res.send(user);
     } catch(err) {
         console.error(err);
-        res.status(500).send({fail: 'Internal Server Error'});
+        res.status(500).send({success: false, msg: 'Internal Server Error'});
     }
 };
 
 export const updateUsers = async (req, res) => {
     try {
+        if (!req.loggedUserEmail) {
+            return res.sendStatus(401);
+        }
         const userData = {...req.body};
         const requiredEmail = req.params.email;
         await updateUserModel(userData, requiredEmail);
-        res.send({success: 'Updated successfully'});
+        return res.send({success: true, msg: 'Updated successfully'});
     } catch (err) {
         console.error(err);
-        res.status(500).send({fail: 'Internal Server Error'});
+        res.status(500).send({success: false, msg: 'Internal Server Error'});
     }
 };
 
 export const deleteUsers = async(req, res) => {
     try {
+        if (!req.loggedUserEmail) {
+            return res.sendStatus(401);
+        }
         const email = req.body.email;
-        console.log(email);
         await deleteUserModel(email);
-        res.send({success: true, msg: 'Deleted successfully'});
+        return res.send({success: true, msg: 'Deleted successfully'});
     } catch (err) {
         console.error(err);
-        res.status(500).send({fail: 'Internal Server Error'});
+        res.status(500).send({success: false, msg: 'Internal Server Error'});
     }
 };
 
@@ -87,10 +100,10 @@ export const registerUser = async (req, res) => {
         await addUsersModel(userData);
 
         const token = jwt.sign({email}, 'SecreteHash', {expiresIn: '2h'});
-        res.status(200).json({success: true, msg: 'Added successfully', token});
+        return res.status(200).json({success: true, msg: 'Added successfully', token});
     } catch (err) {
         console.error(err);
-        res.status(500).send({fail: 'Internal Server Error'});
+        res.status(500).send({success: false, msg: 'Internal Server Error'});
     }
 };
 
@@ -109,7 +122,8 @@ export const loginUser = async (req, res) => {
                 {email},
                 'SecreteHash', // process.env.SECRET
                 {expiresIn: '2h'});
-            return res.status(200).json({success: true, msg: 'Logged In', token});
+
+            res.status(200).json({success: true, msg: 'Logged In', token});
         } else {
             return res.status(400).send({success: false, msg: 'Invalid Credentials Given'});
         }

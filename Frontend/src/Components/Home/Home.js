@@ -5,12 +5,24 @@ import { FeaturesSection } from "./FeaturesSection";
 import HolidayCalendar from "./HolidayCalender";
 import { Header } from "./Header";
 import { Box } from "@mui/material";
+import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 
 
 export const Home = () => {
     const API_PORT = 3001;
     const [userData, setUserDate] = useState({});
     const [userAvatar, setUserAvatar] = useState('');
+    const navigate = useNavigate();
+    
+    const checkValidity = useCallback((response) => {
+        if (!response.ok) {
+            if (400 <= response.status && response.status <= 499) {
+                return navigate('/login');
+            }
+            throw new Error(`Something went wrong with status code: ${response.status}`);
+        }
+    }, [navigate]);
 
     const setProfile = (user) => {
         const nameInitial = user?.username.slice(0,2).toUpperCase();
@@ -18,15 +30,21 @@ export const Home = () => {
     };
 
     const getUserData = useCallback(async () => {
-        const response = await fetch(`http://localhost:${API_PORT}/user/getUser/test909@gmail.com`);
+        const response = await fetch(`http://localhost:${API_PORT}/user/getUser`, {
+            method: 'GET',
+            credentials: 'include',
+        });
+        checkValidity(response);
         const user = await response.json();
         setUserDate(user[0]);
         setProfile(user[0]);
-    }, [API_PORT]);
+    }, [API_PORT, checkValidity]);
 
     useEffect(() => {
         getUserData();
     }, [getUserData]);
+
+    console.log('>>>>', Cookies.get());
 
     console.log(userData);
 

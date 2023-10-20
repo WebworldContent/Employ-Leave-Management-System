@@ -14,7 +14,10 @@ const checkOnline = (isOnline) => isOnline ? 'https://www.pngkey.com/png/detail/
 export const Users = ({port}) => {
     const [users, setusers] = useState([]);
     const getUsers = useCallback(async () => {
-        const response = await fetch(`http://localhost:${port}/user/getUsers`);
+        const response = await fetch(`http://localhost:${port}/user/getUsers`, {
+            method: 'GET',
+            credentials: 'include',
+        });
         const usersInfo = await response.json();
         setusers(usersInfo);
     }, [port]);

@@ -7,7 +7,10 @@ function HolidayCalendar({port}) {
     const [holiday, setHoliday] = useState([]);
 
     const getHolidays = useCallback(async() => {
-        const response = await fetch(`http://localhost:${port}/leaves/get-holidays`);
+        const response = await fetch(`http://localhost:${port}/leaves/get-holidays`, {
+            method: 'GET',
+            credentials: 'include',
+        });
         const holidays = await response.json();
         setHoliday(holidays);
     }, [port]);

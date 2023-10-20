@@ -32,7 +32,10 @@ export default function UsersForm() {
   };
 
   const fetchUserData = useCallback(async(updateEmailId) => {
-    const response = await fetch(`http://localhost:${API_PORT}/user/getUser/${updateEmailId}`);
+    const response = await fetch(`http://localhost:${API_PORT}/user/getUser/${updateEmailId}`, {
+      method: 'GET',
+      credentials: 'include',
+  });
     const userData = await response.json();
     setFormData(userData[0]);
   }, [API_PORT]);
@@ -46,6 +49,7 @@ export default function UsersForm() {
   const addUser = async(data) => {
     await fetch(`http://localhost:${API_PORT}/user/addUser`, {
       method: 'POST',
+      credentials: 'include',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -57,6 +61,7 @@ export default function UsersForm() {
   const updateUser = async(data) => {
     await fetch(`http://localhost:${API_PORT}/user/update-user/${updateEmailId}`, {
       method: 'PUT',
+      credentials: 'include',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',

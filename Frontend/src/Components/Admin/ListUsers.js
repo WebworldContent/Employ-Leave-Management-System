@@ -13,7 +13,10 @@ export const ListUsers = ({port}) => {
     const navigate = useNavigate();
 
     const getUsers = useCallback(async () => {
-        const response = await fetch(`http://localhost:${port}/user/getUsers`);
+        const response = await fetch(`http://localhost:${port}/user/getUsers`, {
+            method: 'GET',
+            credentials: 'include',
+        });
         const usersInfo = await response.json();
         setusers(usersInfo);
     }, [port]);
@@ -21,6 +24,7 @@ export const ListUsers = ({port}) => {
     const deleteUser = async (email) => {
         const response = await fetch(`http://localhost:${port}/user/delete-user`, {
             method: 'DELETE',
+            credentials: 'include',
             headers: {
                 accept: 'application/json',
                 'Content-type': 'application/json'

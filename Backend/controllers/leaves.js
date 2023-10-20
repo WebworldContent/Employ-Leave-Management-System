@@ -3,6 +3,9 @@ import { getUserIdModel } from "../models/usersModel.js";
 
 export const addLeavesUserBased = async(req, res) => {
     try {
+        if (!req.loggedUserEmail) {
+            return res.sendStatus(401);
+        }
         const email = req.body.email;
         const leavesInfo = {
             casual_leave: parseInt(req.body.casualLeave),
@@ -16,48 +19,60 @@ export const addLeavesUserBased = async(req, res) => {
         res.send({success: 'Added leaves successfully'});
     } catch(err) {
         console.error(err);
-        res.status(500).send({fail: 'Internal Server Error'});
+        res.status(500).send({success: false, msg: 'Internal Server Error'});
     }
 };
 
 export const getLeaves = async(req, res) => {
     try {
+        if (!req.loggedUserEmail) {
+            return res.sendStatus(401);
+        }
         const leaves = await getLeavesModel();
         res.send(leaves);
     } catch (err) {
         console.error(err);
-        res.status(500).send({fail: 'Internal Server Error'});
+        res.status(500).send({success: false, msg: 'Internal Server Error'});
     }
 };
 
 export const getLeavesUserBased = async(req, res) => {
     try {
+        if (!req.loggedUserEmail) {
+            return res.sendStatus(401);
+        }
         const email = req.params.email;
         const leaves = await getLeavesUserBasedModel(email);
         res.send(leaves);
     } catch(err) {
         console.error(err);
-        res.status(500).send({fail: 'Internal Server Error'});
+        res.status(500).send({success: false, msg: 'Internal Server Error'});
     }
 };
 
 export const addHolidays = async(req, res) => {
     try {
+        if (!req.loggedUserEmail) {
+            return res.sendStatus(401);
+        }
         const holidays = req.body;
         await addHolidaysModal(holidays);
         res.send({success: 'Added holidays successfully'});
     } catch(err) {
         console.log(err);
-        res.status(500).send({fail: 'Internal Server Error'});
+        res.status(500).send({success: false, msg: 'Internal Server Error'});
     }
 };
 
 export const getHolidays = async(req, res) => {
     try {
+        if (!req.loggedUserEmail) {
+            return res.sendStatus(401);
+        }
         const respose = await getHolidaysModel();
         res.send(respose);
     } catch(err) {
         console.log(err);
-        res.status(500).send({fail: 'Internal Server Error'});
+        res.status(500).send({success: false, msg: 'Internal Server Error'});
     }
 };
