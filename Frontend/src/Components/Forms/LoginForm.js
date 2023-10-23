@@ -44,15 +44,20 @@ const LoginForm = () => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     try {
-      const reponse = await login(formData);
-      const responseBody = await reponse.json();
-      Cookie.set('token', responseBody.token);
-      if (responseBody.success) {
-        navigate('/');
-      }
+        const reponse = await login(formData);
+        const responseBody = await reponse.json();
+        Cookie.set('token', responseBody.token);
+        if (responseBody.success) {
+          navigate('/');
+        }
     } catch(err) {
         console.log(err);
     }
+  };
+
+  const switchRegister = async(e) => {
+    e.preventDefault();
+    navigate('/register');
   };
 
   return (
@@ -82,11 +87,21 @@ const LoginForm = () => {
         <Button
           type="submit"
           variant="contained"
+          name="login"
           color="primary"
           style={buttonStyle}
         >
           Login
         </Button>
+        <Button
+          variant="contained"
+          name="register"
+          color="primary"
+          onClick={switchRegister}
+          style={buttonStyle} 
+        >
+          Register
+      </Button>
       </form>
     </Container>
   );

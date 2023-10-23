@@ -69,3 +69,12 @@ export const deleteUserModel = (email) => {
         });
     });
 };
+
+export const getUserTypeModel = async(email) => {
+    return new Promise((resolve, reject) => {
+        connectionPool.query(`select user_type from users where email = '${email}'`, (err, result) => {
+            if (err) return reject (err);
+            else resolve(result);
+        });
+    });
+}

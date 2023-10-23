@@ -33,7 +33,6 @@ const RegisterForm = () => {
   const register = async(data) => {
     return await fetch(`http://localhost:${API_PORT}/user/register`, {
       method: 'POST',
-      credentials: 'include',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',

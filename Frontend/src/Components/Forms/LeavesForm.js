@@ -34,7 +34,7 @@ export default function LeavesForm() {
     e.preventDefault();
     console.log(formData);
 
-    const isUserHaveLeaves = async(email) => {
+    const userHasLeaves = async(email) => {
       const response = await fetch(`http://localhost:${API_PORT}/leaves/leaves/${email}`, {
         method: 'GET',
         credentials: 'include',
@@ -42,7 +42,7 @@ export default function LeavesForm() {
       return await response.json();
     };
 
-    const userLeaves = await isUserHaveLeaves(formData.email);
+    const userLeaves = await userHasLeaves(formData.email);
 
     const addLeaves = async(data) => {
       await fetch(`http://localhost:${API_PORT}/leaves/add-leaves`, {

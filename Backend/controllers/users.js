@@ -1,4 +1,4 @@
-import {addUsersModel, getUsersModel, getUserByEmailModel, updateUserModel, deleteUserModel} from "../models/usersModel.js";
+import {addUsersModel, getUsersModel, getUserByEmailModel, updateUserModel, deleteUserModel, getUserTypeModel} from "../models/usersModel.js";
 import bycript from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
@@ -107,7 +107,6 @@ export const registerUser = async (req, res) => {
     }
 };
 
-
 export const loginUser = async (req, res) => {
     try {
         const {email, password} = req.body;
@@ -133,4 +132,17 @@ export const loginUser = async (req, res) => {
         return res.status(500).send({ success: false, msg: 'Internal Server Error' });
     }
     
+};
+
+export const getUserType = async(req, res) => {
+    try {
+        const {loggedUserEmail} = req;
+        if (!loggedUserEmail) {
+            return res.sendStatus(401);
+        }
+        const userType = await getUserTypeModel(loggedUserEmail);
+        return res.status(200).send(userType);
+    } catch(err) {
+        console.log(err);
+    }
 };

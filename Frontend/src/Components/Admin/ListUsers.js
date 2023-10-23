@@ -12,14 +12,24 @@ export const ListUsers = ({port}) => {
     const [users, setusers] = useState([]);
     const navigate = useNavigate();
 
+    const checkValidity = useCallback((response) => {
+        if (!response.ok) {
+            if (400 <= response.status && response.status <= 499) {
+                return navigate('/login');
+            }
+            throw new Error(`Something went wrong with status code: ${response.status}`);
+        }
+    }, [navigate]);
+
     const getUsers = useCallback(async () => {
         const response = await fetch(`http://localhost:${port}/user/getUsers`, {
             method: 'GET',
             credentials: 'include',
         });
+        checkValidity(response);
         const usersInfo = await response.json();
         setusers(usersInfo);
-    }, [port]);
+    }, [port, checkValidity]);
 
     const deleteUser = async (email) => {
         const response = await fetch(`http://localhost:${port}/user/delete-user`, {
@@ -31,6 +41,7 @@ export const ListUsers = ({port}) => {
             },
             body: JSON.stringify({email})
         });
+        checkValidity(response);
         const deletedResponse = await response.json();
         console.log(deletedResponse);
     };

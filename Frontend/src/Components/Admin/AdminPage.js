@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Drawer from '@mui/material/Drawer';
 import AppBar from '@mui/material/AppBar';
@@ -18,6 +18,22 @@ const drawerWidth = 240;
 
 function AdminPage() {
   const navigate = useNavigate();
+
+  const checkUserAccessablity = useCallback(async() => {
+    const response = await fetch(`http://localhost:${API_PORT}/user/user-type`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+    const userType = await response.json();
+
+    if (userType !== 'super') {
+      navigate('/login');
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    checkUserAccessablity();
+  }, [checkUserAccessablity]);
 
   return (
     <div style={{ display: 'flex' }}>
