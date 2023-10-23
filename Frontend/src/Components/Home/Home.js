@@ -5,7 +5,6 @@ import { FeaturesSection } from "./FeaturesSection";
 import HolidayCalendar from "./HolidayCalender";
 import { Header } from "./Header";
 import { Box } from "@mui/material";
-import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
 
 
@@ -43,10 +42,6 @@ export const Home = () => {
     useEffect(() => {
         getUserData();
     }, [getUserData]);
-
-    console.log('>>>>', Cookies.get());
-
-    console.log(userData);
 
     return (
         <>

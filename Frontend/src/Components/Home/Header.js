@@ -11,6 +11,8 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import { deepPurple } from '@mui/material/colors';
 import MenuItem from '@mui/material/MenuItem';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -18,6 +20,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 export const Header = ({userData, userAvatar}) => {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -37,7 +40,8 @@ export const Header = ({userData, userAvatar}) => {
   const handleSettings = async (settingOption) => {
     if (settingOption === 'Logout') {
       try {
-        console.log('logging out....');
+        Cookies.remove('token');
+        navigate('/login');
       } catch(error) {
         console.log(error);
       }
