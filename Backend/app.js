@@ -10,7 +10,10 @@ const app = express();
 const PORT = 3001;
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.use(cors({credentials:true, origin: 'http://localhost:3000'}));
+app.use(cors({
+    credentials:true,
+    origin: 'http://localhost:3000',
+}));
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Origin', req.headers.origin);
