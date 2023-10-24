@@ -7,6 +7,7 @@ import {
   Typography
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { isValidUser } from '../Util/Helper';
 
 const defaultData = {
   email: '',
@@ -38,14 +39,19 @@ export default function LeavesForm() {
       const response = await fetch(`http://localhost:${API_PORT}/leaves/leaves/${email}`, {
         method: 'GET',
         credentials: 'include',
-    });
+      });
+      if (!isValidUser(response)) {
+        return [];
+      }
       return await response.json();
     };
 
     const userLeaves = await userHasLeaves(formData.email);
 
+    console.log(userLeaves);
+
     const addLeaves = async(data) => {
-      await fetch(`http://localhost:${API_PORT}/leaves/add-leaves`, {
+      const response = await fetch(`http://localhost:${API_PORT}/leaves/add-leaves`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -54,13 +60,18 @@ export default function LeavesForm() {
         },
         body: JSON.stringify(data)
       });
+      
+      console.log(response);
+
+      if (response.ok) {
+        setFormData(defaultData);
+        navigate('/admin');
+      }
     };
 
     try {
       if (userLeaves.length === 0) {
         addLeaves(formData);
-        setFormData(defaultData);
-        navigate('/');
       }
     } catch(err) {
       console.log(err);

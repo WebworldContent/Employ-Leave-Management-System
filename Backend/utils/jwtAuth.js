@@ -12,6 +12,7 @@ const processCookie = (reqHeaders) => {
 };
 
 export const Authorization = (req, res, next) => {
+    console.log(req.headers);
     const {token} = processCookie(req.headers);
     if (token) {
         jwt.verify(token, 'SecreteHash', (err, data) => {
@@ -23,6 +24,6 @@ export const Authorization = (req, res, next) => {
         })
         next();
     } else {
-        return res.sendStatus(400);
+        return res.sendStatus(402);
     }
 };

@@ -5,23 +5,14 @@ import { FeaturesSection } from "./FeaturesSection";
 import HolidayCalendar from "./HolidayCalender";
 import { Header } from "./Header";
 import { Box } from "@mui/material";
+import { isValidUser } from "../Util/Helper.js";
 import { useNavigate } from "react-router-dom";
-
 
 export const Home = () => {
     const API_PORT = 3001;
     const [userData, setUserDate] = useState({});
     const [userAvatar, setUserAvatar] = useState('');
     const navigate = useNavigate();
-    
-    const checkValidity = useCallback((response) => {
-        if (!response.ok) {
-            if (400 <= response.status && response.status <= 499) {
-                return navigate('/login');
-            }
-            throw new Error(`Something went wrong with status code: ${response.status}`);
-        }
-    }, [navigate]);
 
     const setProfile = (user) => {
         const nameInitial = user?.username.slice(0,2).toUpperCase();
@@ -33,11 +24,15 @@ export const Home = () => {
             method: 'GET',
             credentials: 'include',
         });
-        checkValidity(response);
+
+        if (!isValidUser(response)) {
+            return navigate('/login')
+        }
+
         const user = await response.json();
         setUserDate(user[0]);
         setProfile(user[0]);
-    }, [API_PORT, checkValidity]);
+    }, [API_PORT, navigate]);
 
     useEffect(() => {
         getUserData();

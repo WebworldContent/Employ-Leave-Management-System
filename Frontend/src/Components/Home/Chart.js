@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import { BarChart } from '@mui/x-charts/BarChart';
+import { isValidUser } from '../Util/Helper';
+import { useNavigate } from 'react-router-dom';
 
 export const Chart = ({userData, port}) => {
     const [leaves, setLeaves] = useState([]);
+    const navigate = useNavigate();
 
     const extractedLeaves = (leaves) => {
         delete leaves.ID;
@@ -12,21 +15,22 @@ export const Chart = ({userData, port}) => {
         return Object.values(leaves);
     };
 
-    useEffect(() => {
-        const getUserLeaves = async () => {
-            const response = await fetch(`http://localhost:${port}/leaves/leaves/${userData.email}`, {
-                method: 'GET',
-                credentials: 'include',
-            });
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const leavesRep = await response.json();
-            setLeaves(leavesRep[0] ? extractedLeaves({...leavesRep[0]}) : []);
-        };
+    const {email} = userData;
+    const getUserLeaves = useCallback(async () => {
+        const response = await fetch(`http://localhost:${port}/leaves/leaves/${email}`, {
+            method: 'GET',
+            credentials: 'include',
+        });
+        if (!isValidUser) {
+            return navigate('/login');
+        }
+        const leavesRep = await response.json();
+        setLeaves(leavesRep[0] ? extractedLeaves({...leavesRep[0]}) : []);
+    }, [email, port, navigate]);
 
+    useEffect(() => {
         getUserLeaves();
-    }, [userData, port]);
+    }, [getUserLeaves]);
 
     return (
         <div style={{display:'flex', flexDirection: 'column', justifyContent: "center" }}>

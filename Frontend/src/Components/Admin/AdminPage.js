@@ -26,7 +26,7 @@ function AdminPage() {
     });
     const userType = await response.json();
 
-    if (userType !== 'super') {
+    if (userType[0]?.user_type !== 'super') {
       navigate('/login');
     }
   }, [navigate]);

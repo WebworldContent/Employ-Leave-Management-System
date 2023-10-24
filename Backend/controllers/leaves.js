@@ -3,6 +3,7 @@ import { getUserIdModel } from "../models/usersModel.js";
 
 export const addLeavesUserBased = async(req, res) => {
     try {
+        console.log('workinggggggg......');
         if (!req.loggedUserEmail) {
             return res.sendStatus(401);
         }
@@ -14,9 +15,10 @@ export const addLeavesUserBased = async(req, res) => {
             parental_leave: parseInt(req.body.parentalLeave),
             maternity_leave: parseInt(req.body.maternityLeave),
         };
+        console.log(leavesInfo);
         const userIds = await getUserIdModel(email);
         await addLeavesModel(leavesInfo, userIds[0].userID);
-        res.send({success: 'Added leaves successfully'});
+        res.send({success: true, msg: 'Added leaves successfully'});
     } catch(err) {
         console.error(err);
         res.status(500).send({success: false, msg: 'Internal Server Error'});
@@ -57,7 +59,7 @@ export const addHolidays = async(req, res) => {
         }
         const holidays = req.body;
         await addHolidaysModal(holidays);
-        res.send({success: 'Added holidays successfully'});
+        res.send({success: true, msg: 'Added holidays successfully'});
     } catch(err) {
         console.log(err);
         res.status(500).send({success: false, msg: 'Internal Server Error'});
